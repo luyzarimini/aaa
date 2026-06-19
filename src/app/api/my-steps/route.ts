@@ -1,21 +1,38 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { put, get } from "@vercel/blob";
 
-const FILE = path.join(process.cwd(), "data", "my-steps.json");
+const BLOB_PATH = "steps/entries.json";
 
-async function read(): Promise<Record<string, string>> {
+async function read(): Promise<{ entries: Record<string, string>; ok: boolean }> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return { entries: {}, ok: false };
   try {
-    const text = await fs.readFile(FILE, "utf-8");
+    const res = await get(BLOB_PATH, { access: "private" });
+    if (!res) return { entries: {}, ok: true };
+    const text = await new Response(res.stream).text();
     const parsed = JSON.parse(text);
-    return typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    return { entries: typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {}, ok: true };
   } catch {
-    return {};
+    return { entries: {}, ok: false };
+  }
+}
+
+async function write(entries: Record<string, string>): Promise<boolean> {
+  try {
+    await put(BLOB_PATH, JSON.stringify(entries), {
+      access: "private",
+      allowOverwrite: true,
+      addRandomSuffix: false,
+      contentType: "application/json",
+    });
+    return true;
+  } catch {
+    return false;
   }
 }
 
 export async function GET() {
-  const entries = await read();
+  const { entries, ok } = await read();
+  if (!ok) return NextResponse.json({ error: "Storage error" }, { status: 503 });
   return NextResponse.json({ entries });
 }
 
@@ -25,11 +42,9 @@ export async function POST(req: Request) {
   if (!entries || typeof entries !== "object" || Array.isArray(entries)) {
     return NextResponse.json({ error: "entries required" }, { status: 400 });
   }
-  try {
-    await fs.writeFile(FILE, JSON.stringify(entries, null, 2), "utf-8");
-  } catch (err) {
-    console.error("[my-steps] save failed:", err);
-    return NextResponse.json({ error: "Failed to save." }, { status: 500 });
-  }
+  const { ok } = await read();
+  if (!ok) return NextResponse.json({ error: "Storage error" }, { status: 503 });
+  const saved = await write(entries as Record<string, string>);
+  if (!saved) return NextResponse.json({ error: "Failed to save." }, { status: 500 });
   return NextResponse.json({ entries });
 }

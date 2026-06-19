@@ -1,25 +1,26 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { put, get } from "@vercel/blob";
 
-const FILE = path.join(process.cwd(), "data", "sobriety.json");
+const BLOB_PATH = "sobriety/data.json";
 
 interface SobrietyData {
-  startDate: string;
+  startDate: string; // "YYYY-MM-DD"
 }
 
-async function read(): Promise<SobrietyData | null> {
+async function readData(): Promise<{ data: SobrietyData | null; ok: boolean }> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return { data: null, ok: false };
   try {
-    const text = await fs.readFile(FILE, "utf-8");
-    const parsed = JSON.parse(text);
-    return parsed && typeof parsed === "object" && parsed.startDate ? parsed : null;
+    const res = await get(BLOB_PATH, { access: "private" });
+    if (!res) return { data: null, ok: true };
+    const text = await new Response(res.stream).text();
+    return { data: JSON.parse(text), ok: true };
   } catch {
-    return null;
+    return { data: null, ok: false };
   }
 }
 
 export async function GET() {
-  const data = await read();
+  const { data } = await readData();
   return NextResponse.json({ startDate: data?.startDate ?? null });
 }
 
@@ -30,7 +31,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "valid startDate required" }, { status: 400 });
   }
   try {
-    await fs.writeFile(FILE, JSON.stringify({ startDate }, null, 2), "utf-8");
+    await put(BLOB_PATH, JSON.stringify({ startDate }), {
+      access: "private",
+      allowOverwrite: true,
+      addRandomSuffix: false,
+      contentType: "application/json",
+    });
   } catch (err) {
     console.error("[sobriety] save failed:", err);
     return NextResponse.json({ error: "Failed to save." }, { status: 500 });
