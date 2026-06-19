@@ -180,6 +180,7 @@ export default function Header() {
       items: [
         { href: "/meetings",       label: t.nav.meetings,       desc: t.nav.meetingsDesc },
         { href: "/neurodivergent", label: t.nav.neurodivergent, desc: t.nav.neurodivergentDesc },
+        { href: "/neuroscience",   label: t.nav.neuroscience,   desc: t.nav.neuroscienceDesc },
       ],
     },
   ];
