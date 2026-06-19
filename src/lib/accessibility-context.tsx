@@ -63,23 +63,20 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   const [state, setState] = useState<AccessibilityState>(defaultState);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("aa-accessibility");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setState((prev) => ({ ...prev, ...parsed, overwhelmed: false }));
-      }
-    } catch {}
-
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (prefersReducedMotion || prefersDark) {
-      setState((prev) => ({
-        ...prev,
-        reduceMotion: prev.reduceMotion || prefersReducedMotion,
-        darkMode: prev.darkMode || prefersDark,
-      }));
-    }
+
+    setState((prev) => {
+      try {
+        const raw = localStorage.getItem("aa-accessibility");
+        if (raw) {
+          // User has explicit saved preferences — honour them exactly, never override with system prefs
+          return { ...prev, ...JSON.parse(raw), overwhelmed: false };
+        }
+      } catch {}
+      // No saved preferences yet — use system preferences as initial defaults
+      return { ...prev, overwhelmed: false, reduceMotion: prefersReducedMotion, darkMode: prefersDark };
+    });
   }, []);
 
   useEffect(() => {
