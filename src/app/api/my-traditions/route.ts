@@ -6,7 +6,7 @@ const BLOB_PATH = "traditions/entries.json";
 async function read(): Promise<{ entries: Record<string, string>; ok: boolean }> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return { entries: {}, ok: false };
   try {
-    const res = await get(BLOB_PATH, { access: "private" });
+    const res = await get(BLOB_PATH, { access: "private", useCache: false });
     if (!res) return { entries: {}, ok: true };
     const text = await new Response(res.stream).text();
     const parsed = JSON.parse(text);

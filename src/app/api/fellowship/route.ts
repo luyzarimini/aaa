@@ -16,7 +16,7 @@ async function readMembers(): Promise<{ members: Member[]; debug?: string }> {
     return { members: [], debug: "no token" };
   }
   try {
-    const res = await get(BLOB_PATH, { access: "private" });
+    const res = await get(BLOB_PATH, { access: "private", useCache: false });
     if (!res) return { members: [], debug: "get returned null" };
     const text = await new Response(res.stream).text();
     return { members: JSON.parse(text) };

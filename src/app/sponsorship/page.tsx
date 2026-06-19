@@ -558,6 +558,7 @@ export default function SponsorshipPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, text: editingText }),
       });
+      if (!res.ok) { setReflections(prev); return; }
       const data = await res.json();
       if (data.entries) setReflections(data.entries);
     } catch {

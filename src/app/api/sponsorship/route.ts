@@ -20,7 +20,7 @@ interface SponsorshipEntry {
 async function readEntries(): Promise<{ entries: SponsorshipEntry[]; ok: boolean }> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return { entries: [], ok: false };
   try {
-    const res = await get(BLOB_PATH, { access: "private" });
+    const res = await get(BLOB_PATH, { access: "private", useCache: false });
     if (!res) return { entries: [], ok: true };
     const text = await new Response(res.stream).text();
     const parsed = JSON.parse(text);
@@ -90,6 +90,10 @@ export async function PATCH(req: Request) {
 
   const { entries, ok } = await readEntries();
   if (!ok) return NextResponse.json({ error: "Storage error" }, { status: 503 });
+
+  if (!entries.find((e) => e.id === id)) {
+    return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+  }
 
   const updated = entries.map((e) => {
     if (e.id !== id) return e;

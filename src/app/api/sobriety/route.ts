@@ -10,7 +10,7 @@ interface SobrietyData {
 async function readData(): Promise<{ data: SobrietyData | null; ok: boolean }> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return { data: null, ok: false };
   try {
-    const res = await get(BLOB_PATH, { access: "private" });
+    const res = await get(BLOB_PATH, { access: "private", useCache: false });
     if (!res) return { data: null, ok: true };
     const text = await new Response(res.stream).text();
     return { data: JSON.parse(text), ok: true };

@@ -12,7 +12,7 @@ const BLOB_PATH = "gratitudes/entries.json";
 async function readEntries(): Promise<{ entries: GratitudeEntry[]; ok: boolean }> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return { entries: [], ok: false };
   try {
-    const res = await get(BLOB_PATH, { access: "private" });
+    const res = await get(BLOB_PATH, { access: "private", useCache: false });
     if (!res) return { entries: [], ok: true };
     const text = await new Response(res.stream).text();
     return { entries: JSON.parse(text), ok: true };
