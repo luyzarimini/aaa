@@ -269,6 +269,38 @@ export default function MeetingsContent({ nlMeetings, todayNLMeetings, todayDayN
         </div>
       </section>
 
+      {/* Sponsor Vincent */}
+      <Card variant="amber" padding="lg" className="mb-8">
+        <div className="flex items-start gap-4 mb-4">
+          <div className="w-10 h-10 rounded-2xl bg-[var(--accent-amber)] text-white flex items-center justify-center flex-shrink-0" aria-hidden>
+            <Heart className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="font-semibold text-[var(--text-primary)]">Sponsor Vincent</h2>
+            <p className="text-sm text-[var(--text-secondary)] mt-0.5">Private Zoom meeting</p>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3 mb-4 text-sm">
+          <div className="bg-[var(--bg-card)] rounded-2xl p-3">
+            <span className="text-xs text-[var(--text-muted)] uppercase tracking-wide block mb-1">{t.meetings.meetingIdLabel}</span>
+            <span className="font-mono font-medium text-[var(--text-primary)]">532 514 1029</span>
+          </div>
+          <div className="bg-[var(--bg-card)] rounded-2xl p-3">
+            <span className="text-xs text-[var(--text-muted)] uppercase tracking-wide block mb-1">{t.meetings.passwordLabel}</span>
+            <span className="font-mono font-medium text-[var(--accent-amber)]">723165</span>
+          </div>
+        </div>
+        <a
+          href="https://zoom.us/j/5325141029"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[var(--accent-amber)] text-white text-sm font-medium hover:opacity-90 transition-calm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-amber)]"
+        >
+          <Video className="w-4 h-4" aria-hidden />
+          Join — then enter password 723165
+        </a>
+      </Card>
+
       {/* AA Nederland Online Meetings – Today */}
       {nlMeetings.length > 0 && (
         <section aria-labelledby="aa-nl-heading" className="mb-12">
