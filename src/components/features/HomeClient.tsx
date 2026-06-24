@@ -100,15 +100,22 @@ function TraitPill({ label, desc, color }: { label: string; desc: string; color:
 
 function WeeklyTraitsCard() {
   const { t } = useT();
-  const week = getWeekOfYear(new Date());
+  const today = new Date();
+  const week = getWeekOfYear(today);
   const vi = week % t.home.virtues.length;
   const di = (week * 3 + 17) % t.home.defects.length;
 
+  const weekStart = new Date(new Date(today.getFullYear(), 0, 1).getTime() + week * 7 * 24 * 60 * 60 * 1000);
+  const weekStartLabel = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short" }).format(weekStart);
+
   return (
     <Card padding="md">
-      <div className="flex items-center gap-2 mb-3">
-        <Star className="w-4 h-4 text-[var(--accent-amber)]" aria-hidden />
-        <span className="text-sm font-medium text-[var(--text-primary)]">{t.home.weeklyTraitsTitle}</span>
+      <div className="flex items-center justify-between gap-2 mb-3">
+        <div className="flex items-center gap-2">
+          <Star className="w-4 h-4 text-[var(--accent-amber)]" aria-hidden />
+          <span className="text-sm font-medium text-[var(--text-primary)]">{t.home.weeklyTraitsTitle}</span>
+        </div>
+        <span className="text-xs text-[var(--text-muted)] flex-shrink-0">Since {weekStartLabel}</span>
       </div>
       <div className="space-y-2.5">
         <div className="flex items-center gap-3">
