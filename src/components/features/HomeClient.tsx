@@ -101,7 +101,7 @@ function TraitPill({ label, desc, color }: { label: string; desc: string; color:
 function WeeklyTraitsCard() {
   const { t } = useT();
   const today = new Date();
-  const week = getWeekOfYear(today);
+  const week = getWeekOfYear(today) + 2;
   const vi = week % t.home.virtues.length;
   const di = (week * 3 + 17) % t.home.defects.length;
 
