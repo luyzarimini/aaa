@@ -110,12 +110,9 @@ function WeeklyTraitsCard() {
 
   return (
     <Card padding="md">
-      <div className="flex items-center justify-between gap-2 mb-3">
-        <div className="flex items-center gap-2">
-          <Star className="w-4 h-4 text-[var(--accent-amber)]" aria-hidden />
-          <span className="text-sm font-medium text-[var(--text-primary)]">{t.home.weeklyTraitsTitle}</span>
-        </div>
-        <span className="text-xs text-[var(--text-muted)] flex-shrink-0">Since {weekStartLabel}</span>
+      <div className="flex items-center gap-2 mb-3">
+        <Star className="w-4 h-4 text-[var(--accent-amber)]" aria-hidden />
+        <span className="text-sm font-medium text-[var(--text-primary)]">{t.home.weeklyTraitsTitle}</span>
       </div>
       <div className="space-y-2.5">
         <div className="flex items-center gap-3">
@@ -127,6 +124,7 @@ function WeeklyTraitsCard() {
           <TraitPill label={t.home.defects[di]} desc={t.home.defectDescs[di]} color="red" />
         </div>
       </div>
+      <p className="mt-3 text-xs text-[var(--text-muted)]">Since {weekStartLabel}</p>
     </Card>
   );
 }
