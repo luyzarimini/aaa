@@ -48,19 +48,19 @@ export async function POST(req: Request) {
 
   const html = `
     <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:32px 24px;color:#333;">
-      <p style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;">A@AA Serenity Path — Step Work</p>
+      <p style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;">AA @ Serenity Path — Step Work</p>
       <h1 style="font-size:22px;font-weight:400;margin:0 0 4px;">Step ${step.number}: ${step.shortText}</h1>
       <p style="font-size:13px;color:#888;margin:0 0 24px;font-style:italic;">${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
       <blockquote style="border-left:3px solid #c8a96e;margin:0 0 28px;padding:12px 16px;background:#fdfaf5;font-style:italic;font-size:14px;color:#555;">&ldquo;${step.text}&rdquo;</blockquote>
       <h2 style="font-size:15px;font-weight:600;color:#7a9e7e;margin:0 0 20px;text-transform:uppercase;letter-spacing:0.5px;">Reflection Prompts</h2>
       ${promptsHtml}
       <hr style="border:none;border-top:1px solid #eee;margin:32px 0;" />
-      <p style="font-size:11px;color:#bbb;text-align:center;">Sent from A@AA Serenity Path &mdash; your writing stays with you.</p>
+      <p style="font-size:11px;color:#bbb;text-align:center;">Sent from AA @ Serenity Path &mdash; your writing stays with you.</p>
     </div>`;
 
   const resend = new Resend(process.env.RESEND_API_KEY);
   const { error } = await resend.emails.send({
-    from: "A@AA Serenity Path <onboarding@resend.dev>",
+    from: "AA @ Serenity Path <onboarding@resend.dev>",
     to,
     subject: `Step Work / ${step.shortText}`,
     html,

@@ -26,8 +26,8 @@ const lora = Lora({
 
 export const metadata: Metadata = {
   title: {
-    default: "A@AA Serenity Path — AA Recovery",
-    template: "%s | A@AA Serenity Path",
+    default: "AA @ Serenity Path — AA Recovery",
+    template: "%s | AA @ Serenity Path",
   },
   description:
     "A peaceful digital recovery sanctuary for people in AA. Calm, accessible, and designed for exhausted minds. Daily reflections, prayers, meetings, and gentle recovery tools.",
@@ -44,10 +44,10 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "A@AA Serenity Path",
+    title: "AA @ Serenity Path",
   },
   openGraph: {
-    title: "A@AA Serenity Path — AA Recovery",
+    title: "AA @ Serenity Path — AA Recovery",
     description: "A peaceful digital recovery sanctuary for exhausted minds.",
     type: "website",
   },
