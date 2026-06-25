@@ -105,8 +105,12 @@ function WeeklyTraitsCard() {
   const vi = week % t.home.virtues.length;
   const di = (week * 3 + 17) % t.home.defects.length;
 
-  const weekStart = new Date(new Date(today.getFullYear(), 0, 1).getTime() + week * 7 * 24 * 60 * 60 * 1000);
-  const weekStartLabel = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short" }).format(weekStart);
+  const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon … 6=Sat
+  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - daysToMonday);
+  monday.setHours(0, 0, 0, 0);
+  const weekStartLabel = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }).format(monday);
 
   return (
     <Card padding="md">
