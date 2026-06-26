@@ -44,7 +44,7 @@ function PrayerCard({ prayer }: { prayer: PrayerData }) {
   }, [prayer.title, capturing]);
 
   return (
-    <div ref={cardRef} className="rounded-3xl overflow-hidden">
+    <div id={`prayer-${prayer.id}`} ref={cardRef} className="rounded-3xl overflow-hidden scroll-mt-24">
       <Card padding="lg" className="space-y-4">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -89,6 +89,13 @@ export default function PrayersPage() {
     (p) => category === "all" || p.category === category
   );
 
+  const scrollToPrayer = useCallback((id: string) => {
+    setCategory("all");
+    setTimeout(() => {
+      document.getElementById(`prayer-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  }, []);
+
   const toggleStep = (exerciseId: string, idx: number) => {
     setCompletedSteps((prev) => {
       const set = new Set(prev[exerciseId] || []);
@@ -109,6 +116,30 @@ export default function PrayersPage() {
         <p className="text-lg text-[var(--text-secondary)] font-light leading-relaxed max-w-2xl">
           {t.prayers.description}
         </p>
+      </div>
+
+      {/* Quick-access index */}
+      <div className="mb-10 p-5 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-soft)]">
+        <p className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-widest mb-3">
+          Jump to
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {t.prayers.prayersData.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => scrollToPrayer(p.id)}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-xs font-medium transition-calm",
+                "bg-[var(--bg-card)] border border-[var(--border-soft)]",
+                "text-[var(--text-secondary)]",
+                "hover:bg-[var(--accent-serenity-light)] hover:text-[var(--accent-serenity)] hover:border-[var(--accent-serenity)]/30",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-serenity)]"
+              )}
+            >
+              {p.title}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 2-minute reset */}
